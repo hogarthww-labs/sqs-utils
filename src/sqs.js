@@ -32,7 +32,20 @@ const create = (opts = {}) => {
   return new AWS.SQS({ apiVersion });
 }
 
+const getUrl = (sqs) => (opts) => {
+  const params = {
+    QueueName: opts.name,
+    QueueOwnerAWSAccountId: opts.accountId
+  }
+  return new Promise((resolve, reject) => {
+    sqs.getQueueUrl(params, (err, data) => {
+      err ? reject(err) : resolve(data)
+    })  
+  })
+}
+
 module.exports = {
   configAWS,
+  getUrl,
   create
 }
